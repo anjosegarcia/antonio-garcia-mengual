@@ -1,11 +1,152 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout>
-	<Welcome />
+<Layout fullWidth={true}>
+  <section class="hero">
+    <div class="hero-background">
+      <img src="/images/banner/agmengual.webp" alt="Antonio García Mengual" />
+      <div class="overlay"></div>
+    </div>
+    <div class="hero-content">
+      <h1 id="hero-title">Esculpiendo el alma</h1>
+      <p class="subtitle">Obra de Antonio García Mengual</p>
+      <a href="/obras" class="cta">EXPLORAR OBRA</a>
+    </div>
+  </section>
 </Layout>
+
+<script>
+  const title = document.getElementById("hero-title");
+  if (title && title.textContent) {
+    const text = title.textContent;
+    title.innerHTML = "";
+    [...text].forEach((char, index) => {
+      const span = document.createElement("span");
+      span.textContent = char;
+      span.style.opacity = "0";
+      span.style.animation = `letterFadeIn 1s ease forwards ${index * 0.1}s`;
+      title.appendChild(span);
+    });
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #000;
+  }
+
+  .hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .hero-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(2px) brightness(0.6);
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.6) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 2rem;
+    color: white;
+  }
+
+  @keyframes letterFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+      filter: blur(5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    display: inline-block;
+  }
+
+  .subtitle {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    margin-bottom: 3.5rem;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: simpleFadeIn 1.5s ease-out forwards 2s;
+  }
+
+  .cta {
+    display: inline-block;
+    padding: 1.2rem 3rem;
+    border: 1px solid white;
+    text-decoration: none;
+    color: white;
+    font-size: 0.8rem;
+    letter-spacing: 0.3em;
+    transition: all 0.4s ease;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    animation: simpleFadeIn 1.5s ease-out forwards 2.5s;
+  }
+
+  @keyframes simpleFadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+
+  .cta:hover {
+    background: white;
+    color: black;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      height: 80vh;
+    }
+  }
+</style>

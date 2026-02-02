@@ -1,0 +1,110 @@
+---
+const pathname = new URL(Astro.request.url).pathname;
+const isActive = (path: string) => {
+  if (path === "/" && pathname === "/") return true;
+  if (path !== "/" && pathname.startsWith(path)) return true;
+  return false;
+};
+---
+
+<header>
+  <div class="logo">
+    <a href="/">ANTONIO GARCÍA MENGUAL</a>
+  </div>
+  <nav>
+    <ul>
+      <li>
+        <a href="/sobre-mi" class={isActive("/sobre-mi") ? "active" : ""}
+          >SOBRE MÍ</a
+        >
+      </li>
+      <li>
+        <a href="/obras" class={isActive("/obras") ? "active" : ""}>OBRAS</a>
+      </li>
+      <li>
+        <a href="/contacto" class={isActive("/contacto") ? "active" : ""}
+          >CONTACTO</a
+        >
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<style>
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #eaeaea;
+    height: 81px;
+    box-sizing: border-box;
+  }
+
+  .logo a {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    color: black;
+    text-transform: uppercase;
+  }
+
+  nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav li {
+    position: relative;
+  }
+
+  nav a {
+    text-decoration: none;
+    color: #666;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+    transition: color 0.3s ease;
+    display: block;
+    padding: 5px 0;
+  }
+
+  nav a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 1px;
+    background-color: black;
+  }
+
+  nav a:hover::after {
+    width: 100%;
+    transition: width 0.3s ease;
+  }
+
+  nav a.active::after {
+    width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    header {
+      flex-direction: column;
+      height: auto;
+      padding: 1rem;
+      gap: 1rem;
+    }
+    nav ul {
+      gap: 1.5rem;
+      font-size: 0.8rem;
+    }
+  }
+</style>
