@@ -1,0 +1,339 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <section class="about-container">
+    <header class="page-header">
+      <h1 class="page-title">BIOGRAFÍA</h1>
+      <p class="page-subtitle">Vida y obra de Antonio García Mengual</p>
+    </header>
+
+    <section class="quote-section">
+      <div class="quote-container">
+        <div class="sculptor-image">
+          <img
+            src="/images/about-me/antonio-garcia-mengual-portrait.webp"
+            alt="Antonio García Mengual - Retrato del escultor murciano"
+            class="portrait-image"
+          />
+        </div>
+        <div class="quote-content">
+          <blockquote class="biography-citation">
+            <p class="quote-text">
+              "Mi trabajo es un proceso que une mi experiencia vital con mi
+              deseo de esculpir la figura humana. Cada golpe de martillo que
+              presentan mis obras narra la historia de como fueron creadas, de
+              como fui descubriendo el alma y el sentimiento que se escondían en
+              el interior de la piedra. Por eso trato de retener en cada uno la
+              inspiración con que di el primero, pues es el que contiene toda la
+              verdad, toda la energía del proceso creativo."
+            </p>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="lists-block">
+      <div class="bio-timeline">
+        <span class="dates-marker">1927 — 2007</span>
+        <div class="timeline-content">
+          <p>
+            <strong>Antonio García Mengual</strong> nace en Barcelona el 3 de abril
+            de 1927. De padres murcianos, pronto regresa a Espinardo, donde echa raíces
+            profundas.
+          </p>
+          <p>
+            Se diploma en la Escuela de Artes y Oficios de Murcia, estableciendo
+            su taller y residencia en la misma calle que hoy honra su nombre.
+            Allí, en la intimidad de su estudio, desarrolla su carrera artística
+            de forma exclusiva e ininterrumpida durante más de medio siglo.
+          </p>
+          <p>
+            Su obra es un diálogo constante entre la creación escultórica
+            personal y la imaginería religiosa, dos mundos que en sus manos se
+            funden en una sola búsqueda de la belleza y la espiritualidad.
+          </p>
+        </div>
+      </div>
+
+      <div class="achievements-grid">
+        <div class="achievement-column">
+          <h2 class="section-title">Reconocimientos</h2>
+          <ul class="clean-list">
+            <li>
+              <span class="year">1973</span> Primer premio de Escultura, Ciudad de
+              Cartagena
+            </li>
+            <li><span class="year">1974</span> Premio Anunciata, Valladolid</li>
+            <li>
+              <span class="year">1974</span> Tercer Premio, I Bienal Int. de Arte
+              de Pontevedra
+            </li>
+            <li>
+              <span class="year">1975</span> Premio Línea de las Artes, Murcia
+            </li>
+            <li>
+              <span class="year">1976</span> Segundo Premio, II Bienal Int. de Arte
+              de Pontevedra
+            </li>
+            <li>
+              <span class="year">1976</span> Premio Ciudad de Murcia de Escultura
+            </li>
+            <li><span class="year">1978</span> Premio Salzillo, Murcia</li>
+            <li>
+              <span class="year">1979</span> Segundo Premio "Escultura en el Deporte",
+              Sevilla
+            </li>
+            <li>
+              <span class="year">1980</span> Primer Premio, IV Bienal Int. de Arte
+              de Pontevedra
+            </li>
+          </ul>
+        </div>
+
+        <div class="achievement-column">
+          <h2 class="section-title">Trayectoria</h2>
+          <div class="text-simple">
+            <p>
+              Su legado trasciende fronteras a través de numerosas exposiciones
+              individuales y colectivas, tanto en España como en el extranjero.
+            </p>
+            <p>
+              Hoy, su obra forma parte de las colecciones de museos en <strong
+                >Murcia, Sevilla, Pontevedra, Zaragoza, Valladolid y Barcelona</strong
+              >, testimonio de una vida dedicada a dominar la materia.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+</Layout>
+
+<style>
+  .about-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-bottom: 6rem;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .page-title {
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .page-subtitle {
+    font-size: 1.05rem;
+    color: #666;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    margin-top: 1rem;
+  }
+
+  .quote-section {
+    margin-bottom: 5rem;
+  }
+
+  .quote-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3.5rem;
+    align-items: center;
+  }
+
+  .sculptor-image {
+    width: 100%;
+  }
+
+  .portrait-image {
+    width: 100%;
+    height: auto;
+    filter: grayscale(35%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border-radius: 1rem;
+  }
+
+  .biography-citation {
+    margin: 0;
+    padding-left: 3rem;
+    border-left: 1px solid #eaeaea;
+  }
+
+  .quote-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    font-weight: 300;
+    font-style: italic;
+    color: #111;
+    margin-bottom: 2rem;
+    max-width: 60ch;
+    text-align: justify;
+    hyphens: auto;
+    text-wrap: balance;
+  }
+  .lists-block {
+    border-top: 1px solid #eaeaea;
+    padding-top: 4rem;
+  }
+
+  .bio-timeline {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 3rem;
+    margin-bottom: 5rem;
+  }
+
+  .dates-marker {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: black;
+    text-align: right;
+    padding-top: 5px;
+    border-right: 1px solid #000;
+    padding-right: 2rem;
+  }
+
+  .timeline-content p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #444;
+    font-weight: 300;
+    margin-bottom: 1.8rem;
+  }
+
+  .achievements-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+    align-items: start;
+  }
+
+  .section-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: #888;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    display: inline-block;
+  }
+
+  .clean-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .clean-list li {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.9rem;
+    font-weight: 300;
+    line-height: 1.5;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .year {
+    font-weight: 600;
+    font-size: 0.8rem;
+    min-width: 45px;
+    color: #000;
+  }
+
+  .text-simple p {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #444;
+    font-weight: 300;
+    margin: 0 0 1.4rem;
+  }
+
+  @media (max-width: 850px) {
+    .about-container {
+      padding-bottom: 3.5rem;
+    }
+
+    .page-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .page-title {
+      font-size: clamp(1.55rem, 6vw, 2rem);
+      letter-spacing: 0.08em;
+    }
+
+    .page-subtitle {
+      font-size: 0.98rem;
+      margin-top: 0.75rem;
+    }
+
+    .quote-section {
+      margin-bottom: 3rem;
+    }
+
+    .quote-text {
+      font-size: 1rem;
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    .quote-container {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .portrait-image {
+      max-width: 420px;
+      margin: 0 auto;
+      display: block;
+    }
+    .biography-citation {
+      padding-left: 0;
+      border-left: none;
+      text-align: center;
+    }
+    .bio-timeline {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .dates-marker {
+      text-align: left;
+      border-right: none;
+      border-bottom: 1px solid #000;
+      padding-bottom: 1rem;
+      display: inline-block;
+    }
+    .achievements-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .section-title {
+      margin-bottom: 1.5rem;
+    }
+
+    .clean-list li {
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .text-simple p {
+      font-size: 0.98rem;
+      margin: 0 0 1.1rem;
+    }
+  }
+</style>

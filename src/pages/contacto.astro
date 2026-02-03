@@ -1,0 +1,272 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout>
+  <section class="contact-container">
+    <header class="page-header">
+      <h1 class="page-title">CONTACTO</h1>
+      <p class="page-subtitle">
+        Para más información sobre la obra y el legado del escultor, o para
+        cualquier consulta, puedes ponerte en contacto con nosotros.
+      </p>
+    </header>
+
+    <div>
+      <section class="contact-info">
+        <div class="divider"></div>
+        <div class="contact-item">
+          <span class="label">Correo Electrónico</span>
+          <div class="contact-actions">
+            <a href="mailto:infogarciamengual@gmail.com" class="contact-link">
+              infogarciamengual@gmail.com
+            </a>
+            <button type="button" class="copy-button" data-copy-email>
+              <span class="copy-icon" aria-hidden="true" data-copy-icon>
+                <svg
+                  viewBox="0 0 24 24"
+                  focusable="false"
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                  <path
+                    d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                  ></path>
+                </svg>
+              </span>
+              <span class="copy-label">Copiar</span>
+            </button>
+          </div>
+        </div>
+        <div class="divider"></div>
+      </section>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const copyButton = document.querySelector("[data-copy-email]");
+  const label = copyButton?.querySelector(".copy-label");
+  const icon = copyButton?.querySelector("[data-copy-icon]");
+  const copyIcon = `
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  `;
+  const checkIcon = `
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6 9 17l-5-5"></path>
+    </svg>
+  `;
+  if (copyButton) {
+    copyButton.addEventListener("click", async () => {
+      if (copyButton.hasAttribute("disabled")) return;
+      const email = "infogarciamengual@gmail.com";
+      if (!navigator.clipboard) {
+        if (label) label.textContent = "Copia manual";
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(email);
+        copyButton.setAttribute("disabled", "true");
+        if (label) label.textContent = "Copiado";
+        if (icon) icon.innerHTML = checkIcon;
+        setTimeout(() => {
+          copyButton.removeAttribute("disabled");
+          if (label) label.textContent = "Copiar";
+          if (icon) icon.innerHTML = copyIcon;
+        }, 1600);
+      } catch {
+        if (label) label.textContent = "Copia manual";
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .page-title {
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    margin: 0;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .page-subtitle {
+    font-size: 1.05rem;
+    color: #666;
+    line-height: 1.8;
+    font-weight: 300;
+    max-width: 600px;
+    margin: 1rem auto 0;
+  }
+
+  .contact-info {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .contact-item {
+    padding: 2.5rem 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #999;
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-link {
+    font-size: 1.2rem;
+    color: #111;
+    text-decoration: none;
+    font-weight: 300;
+    transition:
+      color 0.3s ease,
+      border-color 0.3s ease,
+      transform 0.2s ease;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 1.4rem;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .contact-link:hover {
+    color: #000;
+    border-color: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .contact-link:focus-visible {
+    outline: 2px solid rgba(0, 0, 0, 0.4);
+    outline-offset: 4px;
+  }
+
+  .copy-button {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 0.85rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: white;
+    color: #111;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .copy-button[disabled] {
+    cursor: default;
+    opacity: 0.6;
+    transform: none;
+  }
+
+  .copy-button:hover {
+    background: rgba(0, 0, 0, 0.06);
+    border-color: rgba(0, 0, 0, 0.25);
+    transform: translateY(-1px);
+  }
+
+  .copy-button:focus-visible {
+    outline: 2px solid rgba(0, 0, 0, 0.4);
+    outline-offset: 4px;
+  }
+
+  .copy-button[disabled]:hover {
+    background: white;
+    border-color: rgba(0, 0, 0, 0.12);
+    transform: none;
+  }
+
+  .copy-icon {
+    display: inline-flex;
+    width: 16px;
+    height: 16px;
+  }
+
+  .copy-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #ddd, transparent);
+  }
+
+  @media (max-width: 768px) {
+    .contact-container {
+      margin: 0 auto;
+      padding: 0 1.5rem 3.5rem;
+    }
+
+    .page-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .page-title {
+      font-size: clamp(1.55rem, 6vw, 2rem);
+    }
+
+    .page-subtitle {
+      font-size: 0.98rem;
+    }
+
+    .contact-item {
+      padding: 2rem 0;
+      gap: 0.75rem;
+    }
+
+    .contact-link {
+      font-size: 1.2rem;
+    }
+  }
+</style>

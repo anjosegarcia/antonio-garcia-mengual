@@ -27,8 +27,8 @@ const isActive = (path: string) => {
   <nav>
     <ul id="site-nav">
       <li>
-        <a href="/sobre-mi" class={isActive("/sobre-mi") ? "active" : ""}
-          >SOBRE MÍ</a
+        <a href="/biografia" class={isActive("/biografia") ? "active" : ""}
+          >BIOGRAFÍA</a
         >
       </li>
       <li>
@@ -247,6 +247,13 @@ const isActive = (path: string) => {
     nav a {
       display: inline-block;
       padding: 0.6rem 0;
+    }
+
+    nav a::after,
+    nav a:hover::after,
+    nav a.active::after {
+      width: 0;
+      opacity: 0;
     }
 
     header.menu-open nav {
