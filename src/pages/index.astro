@@ -1,5 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "@layouts/Layout.astro";
 ---
 
 <Layout fullWidth={true}>
@@ -17,18 +17,24 @@ import Layout from "../layouts/Layout.astro";
 </Layout>
 
 <script>
-  const title = document.getElementById("hero-title");
-  if (title && title.textContent) {
+  window.addEventListener("DOMContentLoaded", () => {
+    const title = document.getElementById("hero-title");
+    if (!title || title.dataset.animated === "true" || !title.textContent) {
+      return;
+    }
+
     const text = title.textContent;
+    title.dataset.animated = "true";
     title.innerHTML = "";
     [...text].forEach((char, index) => {
       const span = document.createElement("span");
-      span.textContent = char;
+      span.textContent = char === " " ? "\u00A0" : char;
       span.style.opacity = "0";
-      span.style.animation = `letterFadeIn 1s ease forwards ${index * 0.1}s`;
+      span.style.display = "inline-block";
+      span.style.animation = `letterFadeIn 0.8s ease forwards ${index * 0.06}s`;
       title.appendChild(span);
     });
-  }
+  });
 </script>
 
 <style>

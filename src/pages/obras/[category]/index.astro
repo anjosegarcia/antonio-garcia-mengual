@@ -1,0 +1,199 @@
+---
+import type { GetStaticPaths } from "astro";
+import Layout from "@layouts/Layout.astro";
+import { categories, works } from "@data/portfolio";
+
+type Category = (typeof categories)[number];
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return categories.map((cat) => ({
+    params: { category: cat.id },
+    props: { categoryName: cat.title },
+  }));
+};
+
+const { category } = Astro.params;
+const { categoryName } = Astro.props as { categoryName: Category["title"] };
+
+const categoryWorks = works.filter((work) => work.category === category);
+---
+
+<Layout>
+  <header class="category-header">
+    <a href="/obras" class="back-link">&larr; VOLVER</a>
+    <h1 class="page-title">{categoryName}</h1>
+  </header>
+
+  <section class="works-grid">
+    {
+      categoryWorks.length > 0 ? (
+        categoryWorks.map((work) => (
+          <a href={`/obras/${category}/${work.slug}`} class="work-item">
+            <div class="image-wrapper">
+              {work.images?.[0] ? (
+                <img src={work.images[0]} alt={work.title} loading="lazy" />
+              ) : (
+                <div class="image-fallback" aria-hidden="true" />
+              )}
+            </div>
+            <div class="work-info">
+              <h3>{work.title}</h3>
+              <span class="year">{work.year}</span>
+            </div>
+          </a>
+        ))
+      ) : (
+        <p class="empty-msg">No hay obras registradas en esta categoría aún.</p>
+      )
+    }
+  </section>
+</Layout>
+
+<style>
+  .category-header {
+    padding: 0 0 4rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .back-link {
+    align-self: flex-start;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+    font-size: 0.8rem;
+    color: #999;
+    letter-spacing: 0.1em;
+    transition: color 0.3s;
+    position: relative;
+    padding-bottom: 2px;
+  }
+
+  .back-link:hover {
+    color: black;
+  }
+
+  .back-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background-color: currentColor;
+    opacity: 0.3;
+  }
+
+  .back-link::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 100%;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .back-link:hover::before {
+    transform: scaleX(1);
+  }
+
+  .page-title {
+    font-size: 2.4rem;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 4rem 2rem;
+  }
+
+  .work-item {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .image-wrapper {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #f0f0f0;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+
+  .image-fallback {
+    width: 100%;
+    height: 100%;
+    background-color: #e0e0e0;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+
+  .work-item:hover img {
+    transform: scale(1.05);
+  }
+
+  .work-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px solid transparent;
+    padding-top: 0.5rem;
+    transition: border-color 0.3s;
+  }
+
+  .work-item:hover .work-info {
+    border-top: 1px solid black;
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: 0.05em;
+  }
+
+  .year {
+    font-size: 0.8rem;
+    color: #999;
+  }
+
+  .empty-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+  }
+
+  @media (max-width: 600px) {
+    .works-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 850px) {
+    .category-header {
+      padding-bottom: 2.5rem;
+    }
+
+    .page-title {
+      font-size: clamp(1.55rem, 6vw, 2rem);
+      letter-spacing: 0.08em;
+    }
+  }
+</style>

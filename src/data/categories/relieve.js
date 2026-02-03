@@ -1,0 +1,56 @@
+export const relieveWorks = [
+  {
+    id: "relieve-001",
+    slug: "relieve-001",
+    category: "relieve",
+    title: "Relieve 001",
+    year: "2005",
+    material: "Bronce fundido a la cera perdida",
+    dimensions: "80 x 110 cm",
+    description:
+      "Composición volumétrica que explora el movimiento de la luz sobre superficies metálicas, creando una narrativa visual única.",
+    images: ["/images/obras/relieve/relieve-001.webp"],
+  },
+  {
+    id: "relieve-002",
+    slug: "relieve-002",
+    category: "relieve",
+    title: "Relieve 002",
+    images: ["/images/obras/relieve/relieve-002.webp"],
+  },
+  {
+    id: "relieve-003",
+    slug: "relieve-003",
+    category: "relieve",
+    title: "Relieve 003",
+    images: ["/images/obras/relieve/relieve-003.webp"],
+  },
+  {
+    id: "relieve-004",
+    slug: "relieve-004",
+    category: "relieve",
+    title: "Relieve 004",
+    images: ["/images/obras/relieve/relieve-004.webp"],
+  },
+  {
+    id: "relieve-005",
+    slug: "relieve-005",
+    category: "relieve",
+    title: "Relieve 005",
+    images: ["/images/obras/relieve/relieve-005.webp"],
+  },
+  {
+    id: "relieve-006",
+    slug: "relieve-006",
+    category: "relieve",
+    title: "Relieve 006",
+    images: ["/images/obras/relieve/relieve-006.webp"],
+  },
+  {
+    id: "relieve-007",
+    slug: "relieve-007",
+    category: "relieve",
+    title: "Relieve 007",
+    images: ["/images/obras/relieve/relieve-007.webp"],
+  },
+];
