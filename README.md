@@ -3,6 +3,7 @@
 Sitio web del escultor Antonio García Mengual. Proyecto estático construido con Astro.
 
 Licencia:
+
 - Código: MIT (`LICENSE`)
 - Contenidos (textos, imágenes y obras): All Rights Reserved (`LICENSE-CONTENT`)
 

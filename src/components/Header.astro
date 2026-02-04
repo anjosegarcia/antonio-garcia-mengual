@@ -24,6 +24,7 @@ const isActive = (path: string) => {
       <span class="bar"></span>
     </span>
   </button>
+  <div class="nav-overlay"></div>
   <nav>
     <ul id="site-nav">
       <li>
@@ -47,11 +48,13 @@ const isActive = (path: string) => {
   const header = document.querySelector("header");
   const toggle = document.querySelector(".menu-toggle");
   const nav = document.querySelector("nav");
+  const overlay = document.querySelector(".nav-overlay");
 
-  if (header && toggle && nav) {
+  if (header && toggle && nav && overlay) {
     toggle.addEventListener("click", () => {
       const isOpen = header.classList.toggle("menu-open");
       toggle.setAttribute("aria-expanded", String(isOpen));
+      overlay.classList.toggle("is-visible", isOpen);
     });
 
     nav.querySelectorAll("a").forEach((link) => {
@@ -59,8 +62,17 @@ const isActive = (path: string) => {
         if (header.classList.contains("menu-open")) {
           header.classList.remove("menu-open");
           toggle.setAttribute("aria-expanded", "false");
+          overlay.classList.remove("is-visible");
         }
       });
+    });
+
+    overlay.addEventListener("click", () => {
+      if (header.classList.contains("menu-open")) {
+        header.classList.remove("menu-open");
+        toggle.setAttribute("aria-expanded", "false");
+        overlay.classList.remove("is-visible");
+      }
     });
   }
 </script>
@@ -103,6 +115,7 @@ const isActive = (path: string) => {
     border-radius: 6px;
     padding: 0.55rem 0.65rem;
     cursor: pointer;
+    z-index: 3;
     transition:
       background-color 0.2s ease,
       transform 0.2s ease;
@@ -202,6 +215,21 @@ const isActive = (path: string) => {
   }
 
   @media (max-width: 700px) {
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      z-index: 1;
+    }
+
+    .nav-overlay.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     header {
       padding: 1rem 1rem;
       height: auto;
@@ -225,19 +253,22 @@ const isActive = (path: string) => {
     }
 
     nav {
-      position: absolute;
-      top: 100%;
+      position: fixed;
+      top: 0;
       left: 0;
       right: 0;
       background: white;
+      border-radius: 0 0 10px 10px;
       border-bottom: 1px solid #eaeaea;
-      padding: 0.75rem 1rem;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+      padding: 1.25rem 1rem 0.75rem;
       transform: translateY(-10px);
       opacity: 0;
       pointer-events: none;
       transition:
         transform 0.25s ease,
         opacity 0.25s ease;
+      z-index: 2;
     }
 
     nav li {

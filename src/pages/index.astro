@@ -9,7 +9,10 @@ import Layout from "@layouts/Layout.astro";
       <div class="overlay"></div>
     </div>
     <div class="hero-content">
-      <h1 id="hero-title">Esculpiendo el alma</h1>
+      <h1 id="hero-title">
+        <span class="hero-word">Esculpiendo</span>
+        <span class="hero-word">el&nbsp;alma</span>
+      </h1>
       <p class="subtitle">Vida y obra de un escultor murciano</p>
       <a href="/obras" class="cta">EXPLORAR OBRA</a>
     </div>
@@ -23,16 +26,27 @@ import Layout from "@layouts/Layout.astro";
       return;
     }
 
-    const text = title.textContent;
     title.dataset.animated = "true";
-    title.innerHTML = "";
-    [...text].forEach((char, index) => {
-      const span = document.createElement("span");
-      span.textContent = char === " " ? "\u00A0" : char;
-      span.style.opacity = "0";
-      span.style.display = "inline-block";
-      span.style.animation = `letterFadeIn 0.8s ease forwards ${index * 0.06}s`;
-      title.appendChild(span);
+    let letterIndex = 0;
+    const wordSpans = Array.from(title.querySelectorAll(".hero-word"));
+    if (wordSpans.length === 0) {
+      return;
+    }
+
+    wordSpans.forEach((wordSpan) => {
+      const word = wordSpan.textContent ?? "";
+      wordSpan.textContent = "";
+      [...word].forEach((char) => {
+        const span = document.createElement("span");
+        span.textContent = char;
+        span.style.opacity = "0";
+        span.style.display = "inline-block";
+        span.style.animation = `letterFadeIn 0.8s ease forwards ${
+          letterIndex * 0.06
+        }s`;
+        letterIndex += 1;
+        wordSpan.appendChild(span);
+      });
     });
   });
 </script>
@@ -111,6 +125,14 @@ import Layout from "@layouts/Layout.astro";
     text-transform: uppercase;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     display: inline-block;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    hyphens: none;
+  }
+
+  .hero-word {
+    display: inline-block;
+    white-space: nowrap;
   }
 
   .subtitle {
@@ -153,6 +175,13 @@ import Layout from "@layouts/Layout.astro";
   @media (max-width: 768px) {
     .hero {
       height: 100%;
+    }
+  }
+
+  @media (max-width: 420px) {
+    h1 {
+      font-size: clamp(2rem, 9vw, 3rem);
+      letter-spacing: 0.04em;
     }
   }
 </style>

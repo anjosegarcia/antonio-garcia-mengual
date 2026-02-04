@@ -17,6 +17,9 @@ const images = work.images ?? [];
 ---
 
 <Layout>
+  <div class="back-container">
+    <a href={`/obras/${work.category}`} class="back-btn">&larr; Volver</a>
+  </div>
   <div class="work-detail-container">
     <div class="carousel-section">
       <div class="carousel-container">
@@ -75,12 +78,6 @@ const images = work.images ?? [];
           </div>
         )
       }
-
-      <div class="back-container">
-        <a href={`/obras/${work.category}`} class="back-btn"
-          >Volver a la colección</a
-        >
-      </div>
     </div>
   </div>
 </Layout>
@@ -175,7 +172,7 @@ const images = work.images ?? [];
 
   .carousel-section {
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -296,13 +293,16 @@ const images = work.images ?? [];
   }
 
   .back-container {
-    margin-top: 4rem;
+    margin-bottom: 1.5rem;
   }
 
   .back-btn {
     text-decoration: none;
     font-size: 0.8rem;
-    color: black;
+    color: #999;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.3s;
     position: relative;
     padding-bottom: 2px;
   }
@@ -332,7 +332,7 @@ const images = work.images ?? [];
   }
 
   .back-btn:hover {
-    opacity: 1;
+    color: black;
   }
 
   .back-btn:hover::before {
@@ -342,20 +342,25 @@ const images = work.images ?? [];
   @media (max-width: 900px) {
     .work-detail-container {
       grid-template-columns: 1fr;
-      gap: 0;
+      gap: 1rem;
+      min-height: 0;
     }
 
     .carousel-section {
-      aspect-ratio: 1/1;
       background: transparent;
     }
 
     .carousel-container {
+      aspect-ratio: 1 / 1;
       overflow: hidden;
     }
 
     .info-section {
       padding-top: 0;
+    }
+
+    .back-container {
+      margin-bottom: 1rem;
     }
   }
 </style>
