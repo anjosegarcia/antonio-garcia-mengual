@@ -108,6 +108,8 @@ const isActive = (path: string) => {
   .logo {
     flex: 1;
     min-width: 0;
+    display: flex;
+    align-items: center;
   }
 
   .logo a {
@@ -123,6 +125,7 @@ const isActive = (path: string) => {
     display: inline-block;
     width: fit-content;
     white-space: nowrap;
+    max-width: 100%;
   }
 
   header.home-header .logo a,
@@ -275,14 +278,17 @@ const isActive = (path: string) => {
     }
 
     .logo a {
-      font-size: clamp(1rem, 6vw, 1.6rem);
+      font-size: clamp(0.9rem, 4.8vw, 1.25rem);
       letter-spacing: 0.02em;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .menu-toggle {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      flex: 0 0 44px;
     }
 
     nav ul {

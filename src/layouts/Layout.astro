@@ -4,9 +4,50 @@ import Footer from "@components/Footer.astro";
 
 interface Props {
   fullWidth?: boolean;
+  title?: string;
+  description?: string;
 }
 
-const { fullWidth = false } = Astro.props;
+const { fullWidth = false, title, description } = Astro.props;
+
+const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const siteUrl = "https://antoniogarciamengual.com";
+
+const seoByPath: Record<string, { title: string; description: string }> = {
+  "/": {
+    title: "Antonio García Mengual",
+    description:
+      "Sitio oficial de Antonio García Mengual: biografía, obras y contacto del escultor murciano.",
+  },
+  "/biografia": {
+    title: "Biografía | Antonio García Mengual",
+    description:
+      "Biografía de Antonio García Mengual, escultor murciano: trayectoria, estilo y legado artístico.",
+  },
+  "/obras": {
+    title: "Obras | Antonio García Mengual",
+    description:
+      "Explora la obra de Antonio García Mengual: escultura, imaginería y relieves en diferentes categorías.",
+  },
+  "/contacto": {
+    title: "Contacto | Antonio García Mengual",
+    description:
+      "Contacto de Antonio García Mengual para información sobre su obra, legado y consultas.",
+  },
+};
+
+const pathSeo = pathname.startsWith("/obras/")
+  ? {
+      title: "Detalle de Obra | Antonio García Mengual",
+      description:
+        "Ficha de obra de Antonio García Mengual con imágenes y detalles de la pieza.",
+    }
+  : (seoByPath[pathname] ?? seoByPath["/"]);
+
+const pageTitle = title ?? pathSeo.title;
+const pageDescription = description ?? pathSeo.description;
+const canonicalUrl = new URL(pathname === "/" ? "/" : `${pathname}/`, siteUrl)
+  .href;
 ---
 
 <!doctype html>
@@ -22,7 +63,17 @@ const { fullWidth = false } = Astro.props;
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#ffffff" />
     <meta name="generator" content={Astro.generator} />
-    <title>Antonio García Mengual</title>
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="Antonio García Mengual" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
