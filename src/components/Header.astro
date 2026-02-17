@@ -118,11 +118,13 @@ const isActive = (path: string) => {
     font-size: 3rem;
     font-weight: 400;
     letter-spacing: 0.03em;
-    line-height: 1;
+    line-height: normal;
     text-decoration: none;
     color: black;
-    text-transform: uppercase;
+    text-transform: none;
     display: inline-block;
+    padding-top: 0.08em;
+    padding-bottom: 0.02em;
     width: fit-content;
     white-space: nowrap;
     max-width: 100%;
@@ -256,7 +258,7 @@ const isActive = (path: string) => {
     width: 100%;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 870px) {
     .nav-overlay {
       position: fixed;
       inset: 0;
@@ -275,13 +277,12 @@ const isActive = (path: string) => {
     header {
       padding: 1rem 1rem;
       height: 72px;
+      overflow: visible;
     }
 
     .logo a {
       font-size: clamp(0.9rem, 4.8vw, 1.25rem);
       letter-spacing: 0.02em;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
 
     .menu-toggle {
