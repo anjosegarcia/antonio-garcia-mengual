@@ -15,6 +15,12 @@ const { fullWidth = false } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="generator" content={Astro.generator} />
     <title>Antonio García Mengual</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,6 +28,13 @@ const { fullWidth = false } = Astro.props;
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
       rel="stylesheet"
+    />
+    <link
+      rel="preload"
+      href="/fonts/permanent-marker-latin-400-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
   </head>
   <body>
@@ -34,6 +47,16 @@ const { fullWidth = false } = Astro.props;
 </html>
 
 <style is:global>
+  @font-face {
+    font-family: "Permanent Marker";
+    src:
+      url("/fonts/permanent-marker-latin-400-normal.woff2") format("woff2"),
+      url("/fonts/permanent-marker-latin-400-normal.woff") format("woff");
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+  }
+
   html,
   body {
     margin: 0;

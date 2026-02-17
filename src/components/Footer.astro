@@ -1,8 +1,10 @@
 ---
 const year = new Date().getFullYear();
+const pathname = Astro.url.pathname;
+const isHome = pathname === "/" || pathname === "/index.html";
 ---
 
-<footer>
+<footer class={isHome ? "home-footer" : ""}>
   <p>&copy; {year} ANTONIO GARCÍA MENGUAL. Todos los derechos reservados.</p>
 </footer>
 
@@ -21,9 +23,31 @@ const year = new Date().getFullYear();
     color: #666;
   }
 
+  footer.home-footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    background: transparent;
+    background-color: transparent;
+    border-top-color: transparent;
+    pointer-events: none;
+  }
+
+  footer.home-footer p {
+    color: white;
+    mix-blend-mode: difference;
+  }
+
   @media (max-width: 600px) {
     p {
       font-size: 0.6rem;
+    }
+
+    footer.home-footer {
+      padding: 1rem;
+      text-align: center;
     }
   }
 </style>
