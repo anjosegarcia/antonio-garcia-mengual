@@ -1,6 +1,7 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import { categories } from "@data/portfolio";
+import { categories, works } from "@data/portfolio";
+import GalleryLightbox from "@components/GalleryLightbox.astro";
 
 type Category = (typeof categories)[number];
 const categoryItems: Category[] = categories;
@@ -10,7 +11,9 @@ const categoryItems: Category[] = categories;
   <section class="categories-container">
     <header class="page-header">
       <h1 class="page-title">OBRAS</h1>
+      <GalleryLightbox items={works} />
     </header>
+
     <div class="categories-grid">
       {
         categoryItems.map((cat) => (

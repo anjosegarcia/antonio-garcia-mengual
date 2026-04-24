@@ -1,0 +1,124 @@
+---
+interface Props {
+  items: any[];
+  label?: string;
+}
+
+const { items, label = "VER GALERÍA COMPLETA" } = Astro.props;
+---
+
+<div class="gallery-feature-container">
+  <button class="gallery-btn">
+    {label}
+  </button>
+
+  <div
+    class="pswp-gallery-hidden"
+    style="position: absolute; visibility: hidden; pointer-events: none; height: 0; overflow: hidden;"
+  >
+    {
+      items.map((work) =>
+        (work.images || []).map((img: string, idx: number) => (
+          <a
+            href={img}
+            class="pswp-gallery-link"
+            data-pswp-width=""
+            data-pswp-height=""
+            target="_blank"
+          >
+            <img src={img} alt={`${work.title} - ${idx}`} />
+          </a>
+        )),
+      )
+    }
+  </div>
+</div>
+
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+
+  const initGallery = (container: HTMLElement) => {
+    const openBtn = container.querySelector(
+      ".gallery-btn",
+    ) as HTMLButtonElement;
+    const galleryDiv = container.querySelector(
+      ".pswp-gallery-hidden",
+    ) as HTMLElement;
+
+    if (!openBtn || !galleryDiv) return;
+
+    const lightbox = new PhotoSwipeLightbox({
+      gallery: galleryDiv,
+      children: ".pswp-gallery-link",
+      pswpModule: () => import("photoswipe"),
+      loop: true,
+      showHideAnimationType: "fade",
+    });
+
+    (lightbox as any).addFilter("thumbBounds", () => {
+      const rect = openBtn.getBoundingClientRect();
+      return { x: rect.left, y: rect.top, w: rect.width };
+    });
+
+    lightbox.on("gettingData", (event: any) => {
+      const { data } = event;
+      if (data && data.img && !data.width) {
+        data.width = data.img.naturalWidth || data.img.width;
+        data.height = data.img.naturalHeight || data.img.height;
+      }
+    });
+
+    galleryDiv.querySelectorAll(".pswp-gallery-link").forEach((link) => {
+      const img = link.querySelector("img") as HTMLImageElement;
+      if (img && !link.getAttribute("data-pswp-width")) {
+        const setDims = () => {
+          link.setAttribute("data-pswp-width", img.naturalWidth.toString());
+          link.setAttribute("data-pswp-height", img.naturalHeight.toString());
+        };
+        if (img.complete) setDims();
+        else img.onload = setDims;
+      }
+    });
+
+    lightbox.init();
+
+    lightbox.on("beforeOpen", () =>
+      document.body.classList.add("pswp-multiple"),
+    );
+    lightbox.on("destroy", () =>
+      document.body.classList.remove("pswp-multiple"),
+    );
+
+    openBtn.addEventListener("click", () => {
+      lightbox.loadAndOpen(0);
+      openBtn.blur();
+    });
+  };
+
+  document.addEventListener("astro:page-load", () => {
+    document
+      .querySelectorAll(".gallery-feature-container")
+      .forEach((el) => initGallery(el as HTMLElement));
+  });
+</script>
+
+<style>
+  .gallery-btn {
+    margin-top: 1.5rem;
+    background: transparent;
+    border: 1px solid #333;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+    text-transform: uppercase;
+    display: inline-block;
+  }
+
+  .gallery-btn:hover {
+    background: #333;
+    color: white;
+  }
+</style>

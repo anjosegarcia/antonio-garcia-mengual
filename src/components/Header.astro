@@ -45,36 +45,47 @@ const isActive = (path: string) => {
 </header>
 
 <script>
-  const header = document.querySelector("header");
-  const toggle = document.querySelector(".menu-toggle");
-  const nav = document.querySelector("nav");
-  const overlay = document.querySelector(".nav-overlay");
+  const initNav = () => {
+    const header = document.querySelector("header");
+    const toggle = document.querySelector(".menu-toggle");
+    const nav = document.querySelector("nav");
+    const overlay = document.querySelector(".nav-overlay");
 
-  if (header && toggle && nav && overlay) {
-    toggle.addEventListener("click", () => {
-      const isOpen = header.classList.toggle("menu-open");
-      toggle.setAttribute("aria-expanded", String(isOpen));
-      overlay.classList.toggle("is-visible", isOpen);
-    });
+    if (header && toggle && nav && overlay) {
+      const handleToggle = () => {
+        const isOpen = header.classList.toggle("menu-open");
+        toggle.setAttribute("aria-expanded", String(isOpen));
+        overlay.classList.toggle("is-visible", isOpen);
+      };
 
-    nav.querySelectorAll("a").forEach((link) => {
-      link.addEventListener("click", () => {
+      const closeMenu = () => {
         if (header.classList.contains("menu-open")) {
           header.classList.remove("menu-open");
           toggle.setAttribute("aria-expanded", "false");
           overlay.classList.remove("is-visible");
         }
-      });
-    });
+      };
 
-    overlay.addEventListener("click", () => {
-      if (header.classList.contains("menu-open")) {
-        header.classList.remove("menu-open");
-        toggle.setAttribute("aria-expanded", "false");
-        overlay.classList.remove("is-visible");
-      }
-    });
-  }
+      toggle.addEventListener("click", handleToggle);
+
+      nav.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+
+      overlay.addEventListener("click", closeMenu);
+
+      document.addEventListener(
+        "astro:before-swap",
+        () => {
+          toggle.removeEventListener("click", handleToggle);
+          overlay.removeEventListener("click", closeMenu);
+        },
+        { once: true },
+      );
+    }
+  };
+
+  document.addEventListener("astro:page-load", initNav);
 </script>
 
 <style>
@@ -297,7 +308,6 @@ const isActive = (path: string) => {
       gap: 0;
       font-size: 0.9rem;
     }
-
     nav {
       position: fixed;
       top: 0;
@@ -307,7 +317,8 @@ const isActive = (path: string) => {
       border-radius: 0 0 10px 10px;
       border-bottom: 1px solid #eaeaea;
       box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-      padding: 1.25rem 1rem 0.75rem;
+      padding: 4.5rem 0 1rem;
+      overflow: hidden;
       transform: translateY(-10px);
       opacity: 0;
       pointer-events: none;
@@ -329,12 +340,24 @@ const isActive = (path: string) => {
     }
 
     nav li {
-      padding: 0.25rem 0;
+      padding: 0;
+      border-bottom: 1px solid #f7f7f7;
+    }
+
+    nav li:last-child {
+      border-bottom: none;
     }
 
     nav a {
-      display: inline-block;
-      padding: 0.6rem 0;
+      display: block;
+      padding: 1.1rem 2rem;
+      width: 100%;
+      text-align: left;
+      font-size: 1rem;
+    }
+
+    nav a:active {
+      background-color: rgba(0, 0, 0, 0.03);
     }
 
     nav a::after,

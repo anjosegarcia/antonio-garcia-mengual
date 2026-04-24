@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from "astro";
 import Layout from "@layouts/Layout.astro";
 import { categories, works } from "@data/portfolio";
+import GalleryLightbox from "@components/GalleryLightbox.astro";
 
 type Category = (typeof categories)[number];
 
@@ -20,8 +21,14 @@ const categoryWorks = works.filter((work) => work.category === category);
 
 <Layout>
   <header class="category-header">
-    <a href="/obras" class="back-link">&larr; VOLVER</a>
+    <a
+      href="/obras"
+      class="back-link"
+      onclick="if(history.length > 1 && document.referrer.includes(this.pathname)) { event.preventDefault(); history.back(); }"
+      >&larr; VOLVER</a
+    >
     <h1 class="page-title">{categoryName}</h1>
+    {categoryWorks.length > 0 && <GalleryLightbox items={categoryWorks} />}
   </header>
 
   <section class="works-grid">
@@ -31,7 +38,12 @@ const categoryWorks = works.filter((work) => work.category === category);
           <a href={`/obras/${category}/${work.slug}`} class="work-item">
             <div class="image-wrapper">
               {work.images?.[0] ? (
-                <img src={work.images[0]} alt={work.title} loading="lazy" />
+                <img
+                  src={work.images[0]}
+                  alt={work.title}
+                  loading="lazy"
+                  decoding="async"
+                />
               ) : (
                 <div class="image-fallback" aria-hidden="true" />
               )}
@@ -137,14 +149,14 @@ const categoryWorks = works.filter((work) => work.category === category);
     background-color: #e0e0e0;
   }
 
-  img {
+  .image-wrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.6s ease;
   }
 
-  .work-item:hover img {
+  .work-item:hover .image-wrapper img {
     transform: scale(1.05);
   }
 

@@ -1,6 +1,7 @@
 ---
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
+import { ClientRouter } from "astro:transitions";
 
 interface Props {
   fullWidth?: boolean;
@@ -84,12 +85,17 @@ const canonicalUrl = new URL(pathname === "/" ? "/" : `${pathname}/`, siteUrl)
       rel="stylesheet"
     />
     <link
+      rel="stylesheet"
+      href="https://unpkg.com/photoswipe@5.4.4/dist/photoswipe.css"
+    />
+    <link
       rel="preload"
       href="/fonts/permanent-marker-latin-400-normal.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
+    <ClientRouter />
   </head>
   <body>
     <Header />
@@ -125,7 +131,7 @@ const canonicalUrl = new URL(pathname === "/" ? "/" : `${pathname}/`, siteUrl)
     box-sizing: border-box;
   }
   html {
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   body {
     display: flex;
@@ -154,5 +160,55 @@ const canonicalUrl = new URL(pathname === "/" ? "/" : `${pathname}/`, siteUrl)
     .main-padded {
       padding: 2rem 1rem;
     }
+  }
+
+  .pswp__img {
+    object-fit: contain !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .pswp__img--placeholder {
+    display: none !important;
+  }
+
+  .pswp-multiple .pswp__button--arrow {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .pswp-multiple .pswp__button--arrow--prev {
+    left: 10px !important;
+  }
+
+  .pswp-multiple .pswp__button--arrow--next {
+    right: 10px !important;
+  }
+
+  .pswp-multiple .pswp__button--arrow::before {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    border-radius: 50% !important;
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .gallery-btn {
+    margin-top: 1.5rem;
+    background: transparent;
+    border: 1px solid #333;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #333;
+    text-transform: uppercase;
+    display: inline-block;
+  }
+
+  .gallery-btn:hover {
+    background: #333;
+    color: white;
   }
 </style>

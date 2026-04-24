@@ -338,7 +338,7 @@ export const esculturaWorks = [
     slug: "escultura-046",
     category: "escultura",
     title: "Escultura 046",
-    images: ["/images/obras/escultura/escultura-046.webp"],
+    images: ["/images/obras/escultura/escultura-046-1.webp"],
   },
   {
     id: "escultura-049",
@@ -358,35 +358,18 @@ export const esculturaWorks = [
     images: [
       "/images/obras/escultura/escultura-051-1.webp",
       "/images/obras/escultura/escultura-051-2.webp",
+      "/images/obras/escultura/escultura-051-3.webp",
     ],
-  },
-  {
-    id: "escultura-053",
-    slug: "escultura-053",
-    category: "escultura",
-    title: "Escultura 053",
-    images: ["/images/obras/escultura/escultura-053.webp"],
   },
   {
     id: "escultura-054",
     slug: "escultura-054",
     category: "escultura",
     title: "Escultura 054",
-    images: ["/images/obras/escultura/escultura-054.webp"],
-  },
-  {
-    id: "escultura-055",
-    slug: "escultura-055",
-    category: "escultura",
-    title: "Escultura 055",
-    images: ["/images/obras/escultura/escultura-055.webp"],
-  },
-  {
-    id: "escultura-056",
-    slug: "escultura-056",
-    category: "escultura",
-    title: "Escultura 056",
-    images: ["/images/obras/escultura/escultura-056.webp"],
+    images: [
+      "/images/obras/escultura/escultura-054-1.webp",
+      "/images/obras/escultura/escultura-054-2.webp",
+    ],
   },
   {
     id: "escultura-057",
