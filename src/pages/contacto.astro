@@ -100,6 +100,15 @@ import Icon from "@components/Icons.astro";
     const submitSpan = submitBtn?.querySelector("span");
 
     if (form && statusEl && submitBtn) {
+      const messageArea = form.querySelector("#message") as HTMLTextAreaElement;
+
+      if (messageArea) {
+        messageArea.addEventListener("input", () => {
+          messageArea.style.height = "auto";
+          messageArea.style.height = messageArea.scrollHeight + "px";
+        });
+      }
+
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -127,6 +136,7 @@ import Icon from "@components/Icons.astro";
             statusEl.classList.add("success");
             statusEl.style.display = "block";
             form.reset();
+            if (messageArea) messageArea.style.height = "auto";
           } else {
             statusEl.textContent =
               "Hubo un problema al enviar el mensaje. Inténtalo de nuevo o escríbenos a infogarciamengual@gmail.com.";
@@ -261,6 +271,13 @@ import Icon from "@components/Icons.astro";
     border-radius: 0;
     outline: none;
     font-weight: 300;
+  }
+
+  .form-group textarea {
+    resize: none;
+    overflow: hidden;
+    min-height: 50px;
+    field-sizing: content;
   }
 
   .form-group input:focus,
