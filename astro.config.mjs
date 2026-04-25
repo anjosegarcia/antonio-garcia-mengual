@@ -6,6 +6,10 @@ import cloudflare from "@astrojs/cloudflare";
 // https://astro.build/config
 export default defineConfig({
   output: "static",
+  build: {
+    format: "file",
+  },
+  trailingSlash: "never",
   adapter: cloudflare({
     imageService: "compile",
   }),

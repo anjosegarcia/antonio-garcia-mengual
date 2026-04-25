@@ -47,8 +47,7 @@ const pathSeo = pathname.startsWith("/obras/")
 
 const pageTitle = title ?? pathSeo.title;
 const pageDescription = description ?? pathSeo.description;
-const canonicalUrl = new URL(pathname === "/" ? "/" : `${pathname}/`, siteUrl)
-  .href;
+const canonicalUrl = new URL(pathname, siteUrl).href;
 ---
 
 <!doctype html>
