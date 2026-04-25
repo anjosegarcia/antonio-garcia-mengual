@@ -12,6 +12,7 @@ if (Astro.request.method === "POST") {
     const email = data.get("email");
     const message = data.get("message");
     const RESEND_API_KEY = import.meta.env.RESEND_API_KEY;
+    const CONTACT_BCC_EMAIL = import.meta.env.CONTACT_BCC_EMAIL;
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -21,6 +22,7 @@ if (Astro.request.method === "POST") {
       body: JSON.stringify({
         from: "Antonio García Mengual <no-reply@antoniogarciamengual.com>",
         to: ["infogarciamengual@gmail.com"],
+        bcc: CONTACT_BCC_EMAIL ? [CONTACT_BCC_EMAIL] : undefined,
         reply_to: email,
         subject: `Consulta: ${name} (vía antoniogarciamengual.com)`,
         html: `
