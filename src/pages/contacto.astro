@@ -288,15 +288,21 @@ import Icon from "@components/Icons.astro";
     position: relative;
   }
 
-  .icon-check {
+  .copy-icon-wrapper :global(.icon-copy),
+  .copy-icon-wrapper :global(.icon-check) {
+    position: absolute;
+    inset: 0;
+  }
+
+  .copy-icon-wrapper :global(.icon-check) {
     display: none;
   }
 
-  .copy-button.is-copied .icon-copy {
+  .copy-button.is-copied .copy-icon-wrapper :global(.icon-copy) {
     display: none;
   }
 
-  .copy-button.is-copied .icon-check {
+  .copy-button.is-copied .copy-icon-wrapper :global(.icon-check) {
     display: block;
   }
 
