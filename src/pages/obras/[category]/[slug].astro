@@ -178,6 +178,9 @@ const images = work.images ?? [];
         children: ".pswp-link",
         pswpModule: () => import("photoswipe"),
         loop: true,
+        showHideAnimationType: "fade",
+        showAnimationDuration: 180,
+        hideAnimationDuration: 140,
       });
 
       initPhotoSwipeWithCaptions(lightbox);
@@ -199,11 +202,13 @@ const images = work.images ?? [];
       const imagesCount = parseInt(emblaNode?.dataset?.imagesCount || "0");
       if (lightbox) {
         lightbox.on("beforeOpen", () => {
+          document.body.classList.add("pswp-active");
           if (imagesCount > 1) {
             document.body.classList.add("pswp-multiple");
           }
         });
         lightbox.on("destroy", () => {
+          document.body.classList.remove("pswp-active");
           document.body.classList.remove("pswp-multiple");
         });
       }
@@ -228,6 +233,7 @@ const images = work.images ?? [];
       () => {
         if (lightbox) lightbox.destroy();
         if (emblaApi) emblaApi.destroy();
+        document.body.classList.remove("pswp-active");
         document.body.classList.remove("pswp-multiple");
         document.removeEventListener("keydown", handleKeydown);
       },
@@ -332,6 +338,13 @@ const images = work.images ?? [];
   .nav-btn svg {
     width: 32px;
     height: 32px;
+  }
+
+  :global(body.pswp-active .carousel-nav),
+  :global(body.pswp-active .embla__dots) {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .embla__dots {
@@ -497,5 +510,3 @@ const images = work.images ?? [];
     }
   }
 </style>
-in-bottom: 2rem; } }
-
