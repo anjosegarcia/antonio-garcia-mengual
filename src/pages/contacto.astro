@@ -217,6 +217,10 @@ import Icon from "@components/Icons.astro";
     position: relative;
   }
 
+  .contact-content > * {
+    min-width: 0;
+  }
+
   .contact-content::after {
     content: "";
     position: absolute;
@@ -243,7 +247,7 @@ import Icon from "@components/Icons.astro";
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #999;
+    color: #666;
   }
 
   .form-group input,
@@ -330,7 +334,7 @@ import Icon from "@components/Icons.astro";
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    color: #999;
+    color: #666;
   }
 
   .contact-link {
@@ -341,6 +345,8 @@ import Icon from "@components/Icons.astro";
     transition: all 0.3s ease;
     border-bottom: 1px solid transparent;
     padding-bottom: 0.2rem;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .contact-link:hover {
@@ -394,9 +400,15 @@ import Icon from "@components/Icons.astro";
     max-width: calc((100% - 8rem) / 2);
     white-space: normal;
     overflow-wrap: anywhere;
+    box-sizing: border-box;
   }
 
   @media (max-width: 600px) {
+    .form-group input,
+    .form-group textarea {
+      font-size: 16px;
+    }
+
     .status-message {
       white-space: normal;
       width: 100%;
