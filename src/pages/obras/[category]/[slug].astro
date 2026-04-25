@@ -2,6 +2,8 @@
 import type { GetStaticPaths } from "astro";
 import Layout from "@layouts/Layout.astro";
 import { works } from "@data/portfolio";
+import { Image } from "astro:assets";
+import Icon from "@components/Icons.astro";
 
 type Work = (typeof works)[number];
 
@@ -21,8 +23,8 @@ const images = work.images ?? [];
     <a
       href={`/obras/${work.category}`}
       class="back-btn"
-      onclick="if(history.length > 1 && document.referrer.includes(this.pathname)) { event.preventDefault(); history.back(); }"
-      >&larr; Volver</a
+      aria-label={`Volver a la categoría ${work.category.replace("-", " ")}`}
+      ><Icon name="chevron-left" size={18} /> Volver</a
     >
   </div>
   <div class="work-detail-container">
@@ -36,10 +38,21 @@ const images = work.images ?? [];
                   href={img}
                   data-pswp-width=""
                   data-pswp-height=""
+                  data-pswp-category={work.category}
+                  data-pswp-title={work.title}
+                  data-pswp-year={work.year}
+                  data-pswp-material={work.material}
+                  data-pswp-dimensions={work.dimensions}
                   target="_blank"
                   class="pswp-link"
                 >
-                  <img src={img} alt={`${work.title} - view ${index + 1}`} />
+                  <Image
+                    src={img}
+                    alt={`${work.title} - vista ${index + 1}`}
+                    width={1000}
+                    height={800}
+                    loading={index === 0 ? "eager" : "lazy"}
+                  />
                 </a>
               </div>
             ))
@@ -48,11 +61,19 @@ const images = work.images ?? [];
         {
           images.length > 1 && (
             <div class="carousel-nav">
-              <button class="nav-btn prev" id="prevBtn" aria-label="Anterior">
-                &larr;
+              <button
+                class="nav-btn prev"
+                id="prevBtn"
+                aria-label="Ver imagen anterior"
+              >
+                <Icon name="chevron-left" size={32} />
               </button>
-              <button class="nav-btn next" id="nextBtn" aria-label="Siguiente">
-                &rarr;
+              <button
+                class="nav-btn next"
+                id="nextBtn"
+                aria-label="Ver siguiente imagen"
+              >
+                <Icon name="chevron-right" size={32} />
               </button>
             </div>
           )
@@ -98,10 +119,12 @@ const images = work.images ?? [];
 
 <script>
   import EmblaCarousel from "embla-carousel";
+  import type { EmblaCarouselType } from "embla-carousel";
   import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import { initPhotoSwipeWithCaptions } from "../../../utils/photoswipe";
 
+  let emblaApi: EmblaCarouselType | null = null;
   let lightbox: PhotoSwipeLightbox | null = null;
-  let emblaApi: any = null;
 
   const initPage = () => {
     if (lightbox) lightbox.destroy();
@@ -120,9 +143,9 @@ const images = work.images ?? [];
       });
 
       if (prevBtn)
-        prevBtn.addEventListener("click", () => emblaApi.scrollPrev());
+        prevBtn.addEventListener("click", () => emblaApi?.scrollPrev());
       if (nextBtn)
-        nextBtn.addEventListener("click", () => emblaApi.scrollNext());
+        nextBtn.addEventListener("click", () => emblaApi?.scrollNext());
 
       if (dotsNode) {
         dotsNode.innerHTML = "";
@@ -130,11 +153,12 @@ const images = work.images ?? [];
         slides.forEach((_: HTMLElement, index: number) => {
           const dot = document.createElement("button");
           dot.classList.add("embla__dot");
-          dot.addEventListener("click", () => emblaApi.scrollTo(index));
+          dot.addEventListener("click", () => emblaApi?.scrollTo(index));
           dotsNode.appendChild(dot);
         });
 
         const updateDots = () => {
+          if (!emblaApi) return;
           const selected = emblaApi.selectedScrollSnap();
           Array.from(dotsNode.children).forEach((dot, index) => {
             dot.classList.toggle("is-selected", index === selected);
@@ -156,16 +180,7 @@ const images = work.images ?? [];
         loop: true,
       });
 
-      lightbox.on("gettingData", (event) => {
-        const { data } = event;
-        if (data && data.img) {
-          const img = data.img;
-          if (img.naturalWidth && !data.width) {
-            data.width = img.naturalWidth;
-            data.height = img.naturalHeight;
-          }
-        }
-      });
+      initPhotoSwipeWithCaptions(lightbox);
 
       document.querySelectorAll(".pswp-link").forEach((link) => {
         const img = link.querySelector("img") as HTMLImageElement;
@@ -182,21 +197,28 @@ const images = work.images ?? [];
       lightbox.init();
 
       const imagesCount = parseInt(emblaNode?.dataset?.imagesCount || "0");
-      lightbox.on("beforeOpen", () => {
-        if (imagesCount > 1) {
-          document.body.classList.add("pswp-multiple");
-        }
-      });
-
-      lightbox.on("destroy", () => {
-        document.body.classList.remove("pswp-multiple");
-      });
+      if (lightbox) {
+        lightbox.on("beforeOpen", () => {
+          if (imagesCount > 1) {
+            document.body.classList.add("pswp-multiple");
+          }
+        });
+        lightbox.on("destroy", () => {
+          document.body.classList.remove("pswp-multiple");
+        });
+      }
     }
 
-    const handleKeydown = (event: KeyboardEvent) => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      const isPhotoswipeOpen =
+        document.body.classList.contains("pswp-open") ||
+        document.querySelector(".pswp--open");
+
+      if (isPhotoswipeOpen) return;
+
       if (emblaApi) {
-        if (event.key === "ArrowRight") emblaApi.scrollNext();
-        if (event.key === "ArrowLeft") emblaApi.scrollPrev();
+        if (e.key === "ArrowRight") emblaApi.scrollNext();
+        if (e.key === "ArrowLeft") emblaApi.scrollPrev();
       }
     };
     document.addEventListener("keydown", handleKeydown);
@@ -289,24 +311,27 @@ const images = work.images ?? [];
   }
 
   .nav-btn {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.4);
     border: none;
     width: 44px;
     height: 44px;
-    border-radius: 50%;
+    border-radius: 4px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
-    color: #333;
+    color: white;
     pointer-events: auto;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   .nav-btn:hover {
-    background: white;
-    transform: scale(1.05);
+    background: rgba(0, 0, 0, 0.7);
+  }
+
+  .nav-btn svg {
+    width: 32px;
+    height: 32px;
   }
 
   .embla__dots {
@@ -472,3 +497,5 @@ const images = work.images ?? [];
     }
   }
 </style>
+in-bottom: 2rem; } }
+

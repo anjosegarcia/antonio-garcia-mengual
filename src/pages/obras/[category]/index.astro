@@ -3,6 +3,8 @@ import type { GetStaticPaths } from "astro";
 import Layout from "@layouts/Layout.astro";
 import { categories, works } from "@data/portfolio";
 import GalleryLightbox from "@components/GalleryLightbox.astro";
+import { Image } from "astro:assets";
+import Icon from "@components/Icons.astro";
 
 type Category = (typeof categories)[number];
 
@@ -24,8 +26,8 @@ const categoryWorks = works.filter((work) => work.category === category);
     <a
       href="/obras"
       class="back-link"
-      onclick="if(history.length > 1 && document.referrer.includes(this.pathname)) { event.preventDefault(); history.back(); }"
-      >&larr; VOLVER</a
+      aria-label="Volver al listado de categorías"
+      ><Icon name="chevron-left" size={18} /> VOLVER</a
     >
     <h1 class="page-title">{categoryName}</h1>
     {categoryWorks.length > 0 && <GalleryLightbox items={categoryWorks} />}
@@ -38,11 +40,12 @@ const categoryWorks = works.filter((work) => work.category === category);
           <a href={`/obras/${category}/${work.slug}`} class="work-item">
             <div class="image-wrapper">
               {work.images?.[0] ? (
-                <img
+                <Image
                   src={work.images[0]}
-                  alt={work.title}
-                  loading="lazy"
-                  decoding="async"
+                  alt={`Escultura ${work.title}`}
+                  width={400}
+                  height={400}
+                  class="grid-image"
                 />
               ) : (
                 <div class="image-fallback" aria-hidden="true" />
@@ -209,3 +212,6 @@ const categoryWorks = works.filter((work) => work.category === category);
     }
   }
 </style>
+
+} }
+

@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+
 interface Props {
   items: any[];
   label?: string;
@@ -8,7 +10,7 @@ const { items, label = "VER GALERÍA COMPLETA" } = Astro.props;
 ---
 
 <div class="gallery-feature-container">
-  <button class="gallery-btn">
+  <button class="gallery-btn" aria-label="Abrir galería de imágenes">
     {label}
   </button>
 
@@ -24,9 +26,19 @@ const { items, label = "VER GALERÍA COMPLETA" } = Astro.props;
             class="pswp-gallery-link"
             data-pswp-width=""
             data-pswp-height=""
+            data-pswp-category={work.category}
+            data-pswp-title={work.title}
+            data-pswp-year={work.year}
+            data-pswp-material={work.material}
+            data-pswp-dimensions={work.dimensions}
             target="_blank"
           >
-            <img src={img} alt={`${work.title} - ${idx}`} />
+            <Image
+              src={img}
+              alt={`${work.title} - imagen ${idx + 1}`}
+              width={1200}
+              height={900}
+            />
           </a>
         )),
       )
@@ -36,6 +48,7 @@ const { items, label = "VER GALERÍA COMPLETA" } = Astro.props;
 
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";
+  import { initPhotoSwipeWithCaptions } from "../utils/photoswipe";
 
   const initGallery = (container: HTMLElement) => {
     const openBtn = container.querySelector(
@@ -55,17 +68,11 @@ const { items, label = "VER GALERÍA COMPLETA" } = Astro.props;
       showHideAnimationType: "fade",
     });
 
+    initPhotoSwipeWithCaptions(lightbox);
+
     (lightbox as any).addFilter("thumbBounds", () => {
       const rect = openBtn.getBoundingClientRect();
       return { x: rect.left, y: rect.top, w: rect.width };
-    });
-
-    lightbox.on("gettingData", (event: any) => {
-      const { data } = event;
-      if (data && data.img && !data.width) {
-        data.width = data.img.naturalWidth || data.img.width;
-        data.height = data.img.naturalHeight || data.img.height;
-      }
     });
 
     galleryDiv.querySelectorAll(".pswp-gallery-link").forEach((link) => {

@@ -2,6 +2,8 @@
 import Layout from "@layouts/Layout.astro";
 import { categories, works } from "@data/portfolio";
 import GalleryLightbox from "@components/GalleryLightbox.astro";
+import { Image } from "astro:assets";
+import Icon from "@components/Icons.astro";
 
 type Category = (typeof categories)[number];
 const categoryItems: Category[] = categories;
@@ -20,7 +22,12 @@ const categoryItems: Category[] = categories;
           <a href={`/obras/${cat.id}`} class="category-card">
             <div class="category-image">
               {cat.image ? (
-                <img src={cat.image} alt={cat.title} />
+                <Image
+                  src={cat.image}
+                  alt={`Colección de ${cat.title}`}
+                  width={600}
+                  height={450}
+                />
               ) : (
                 <div class="image-fallback" aria-hidden="true" />
               )}
@@ -28,7 +35,10 @@ const categoryItems: Category[] = categories;
             </div>
             <div class="card-content">
               <h2>{cat.title}</h2>
-              <span class="explore">VER COLECCIÓN &rarr;</span>
+              <span class="explore">
+                VER COLECCIÓN{" "}
+                <Icon name="arrow-right" size={14} class="arrow" />
+              </span>
             </div>
           </a>
         ))
@@ -133,16 +143,22 @@ const categoryItems: Category[] = categories;
     border-bottom: 1px solid white;
     padding-bottom: 5px;
     transition: all 0.4s ease;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
   }
 
-  .category-card:hover h2 {
-    transform: translateY(-5px);
+  .arrow {
+    transition: transform 0.4s ease;
   }
 
   .category-card:hover .explore {
     opacity: 1;
     letter-spacing: 0.4em;
+  }
+
+  .category-card:hover .arrow {
+    transform: translateX(5px);
   }
 
   .image-fallback {

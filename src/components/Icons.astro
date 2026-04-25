@@ -1,0 +1,62 @@
+---
+interface Props {
+  name:
+    | "copy"
+    | "check"
+    | "send"
+    | "chevron-left"
+    | "chevron-right"
+    | "arrow-right";
+  class?: string;
+  size?: number | string;
+  strokeWidth?: number;
+}
+
+const { name, class: className, size = 20, strokeWidth = 1.6 } = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={strokeWidth}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={className}
+>
+  {
+    name === "copy" && (
+      <>
+        <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+      </>
+    )
+  }
+
+  {name === "check" && <polyline points="20 6 9 17 4 12" />}
+
+  {
+    name === "send" && (
+      <>
+        <line x1="22" y1="2" x2="11" y2="13" />
+        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+      </>
+    )
+  }
+
+  {name === "chevron-left" && <polyline points="15 18 9 12 15 6" />}
+
+  {name === "chevron-right" && <polyline points="9 18 15 12 9 6" />}
+
+  {
+    name === "arrow-right" && (
+      <>
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </>
+    )
+  }
+</svg>

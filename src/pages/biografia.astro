@@ -1,5 +1,6 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import { Image } from "astro:assets";
 ---
 
 <Layout>
@@ -12,10 +13,13 @@ import Layout from "@layouts/Layout.astro";
     <section class="quote-section">
       <div class="quote-container">
         <div class="sculptor-image">
-          <img
+          <Image
             src="/images/about-me/antonio-garcia-mengual-portrait.webp"
-            alt="Antonio García Mengual - Retrato del escultor murciano"
+            alt="Retrato del escultor Antonio García Mengual"
+            width={600}
+            height={800}
             class="portrait-image"
+            loading="eager"
           />
         </div>
         <div class="quote-content">

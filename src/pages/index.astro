@@ -1,11 +1,19 @@
 ---
 import Layout from "@layouts/Layout.astro";
+import { Image } from "astro:assets";
 ---
 
 <Layout fullWidth={true}>
   <section class="hero">
     <div class="hero-background">
-      <img src="/images/banner/agmengual.webp" alt="Antonio García Mengual" />
+      <Image
+        src="/images/banner/agmengual.webp"
+        alt="Escultor Antonio García Mengual"
+        width={1920}
+        height={1080}
+        loading="eager"
+        fetchpriority="high"
+      />
       <div class="overlay"></div>
     </div>
     <div class="hero-content">
@@ -14,7 +22,9 @@ import Layout from "@layouts/Layout.astro";
         <span class="hero-word">el&nbsp;alma</span>
       </h1>
       <p class="subtitle">Vida y obra de un escultor murciano</p>
-      <a href="/obras" class="cta">EXPLORAR OBRA</a>
+      <a href="/obras" class="cta" aria-label="Explorar la obra del escultor"
+        >EXPLORAR OBRA</a
+      >
     </div>
   </section>
 </Layout>

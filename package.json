@@ -9,9 +9,12 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.8",
+    "@astrojs/cloudflare": "^13.2.1",
     "@astrojs/sitemap": "^3.7.2",
     "astro": "^6.1.9",
     "embla-carousel": "^8.6.0",
-    "photoswipe": "^5.4.4"
+    "photoswipe": "^5.4.4",
+    "typescript": "^6.0.3"
   }
 }
