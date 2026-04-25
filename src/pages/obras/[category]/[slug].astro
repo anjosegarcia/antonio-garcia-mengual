@@ -180,7 +180,7 @@ const images = work.images ?? [];
         loop: true,
         showHideAnimationType: "fade",
         showAnimationDuration: 180,
-        hideAnimationDuration: 140,
+        hideAnimationDuration: 0,
       });
 
       initPhotoSwipeWithCaptions(lightbox);
@@ -207,6 +207,12 @@ const images = work.images ?? [];
             document.body.classList.add("pswp-multiple");
           }
         });
+
+        lightbox.on("close", () => {
+          document.body.classList.remove("pswp-active");
+          document.body.classList.remove("pswp-multiple");
+        });
+
         lightbox.on("destroy", () => {
           document.body.classList.remove("pswp-active");
           document.body.classList.remove("pswp-multiple");
