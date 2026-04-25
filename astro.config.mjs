@@ -5,10 +5,8 @@ import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server",
-  adapter: cloudflare({
-    imageService: "compile",
-  }),
+  output: "static",
+  adapter: cloudflare(),
   site: process.env.SITE_URL ?? "https://antoniogarciamengual.com",
   integrations: [sitemap()],
   vite: {

@@ -1,70 +1,6 @@
 ---
-export const prerender = false;
 import Layout from "@layouts/Layout.astro";
 import Icon from "@components/Icons.astro";
-
-let status = { type: "", message: "" };
-
-if (Astro.request.method === "POST") {
-  try {
-    const data = await Astro.request.formData();
-    const name = data.get("name");
-    const email = data.get("email");
-    const message = data.get("message");
-    const RESEND_API_KEY = import.meta.env.RESEND_API_KEY;
-    const CONTACT_BCC_EMAIL = import.meta.env.CONTACT_BCC_EMAIL;
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-      },
-      body: JSON.stringify({
-        from: "Antonio García Mengual <no-reply@antoniogarciamengual.com>",
-        to: ["infogarciamengual@gmail.com"],
-        bcc: CONTACT_BCC_EMAIL ? [CONTACT_BCC_EMAIL] : undefined,
-        reply_to: email,
-        subject: `Consulta: ${name} (vía antoniogarciamengual.com)`,
-        html: `
-          <div lang="es" style="font-family: sans-serif; line-height: 1.6; color: #333; max-width: 600px;">
-            <h2 style="font-weight: 300; border-bottom: 1px solid #eee; padding-bottom: 15px;">Nueva consulta recibida</h2>
-            <p>Se ha recibido un nuevo mensaje a través del formulario de contacto:</p>
-            
-            <div style="background: #fdfdfd; border: 1px solid #eee; padding: 20px; border-radius: 8px; margin: 20px 0;">
-              <p style="margin: 0 0 10px 0;"><strong>Nombre:</strong> ${name}</p>
-              <p style="margin: 0;"><strong>Email:</strong> ${email}</p>
-            </div>
-
-            <p><strong>Mensaje:</strong></p>
-            <div style="background: #fdfdfd; border: 1px solid #eee; padding: 20px; border-radius: 8px; white-space: pre-wrap; color: #555;">${message}</div>
-            
-            <p style="font-size: 0.85rem; color: #999; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px;">
-              Este es un mensaje automático enviado desde el formulario de antoniogarciamengual.com
-            </p>
-          </div>
-        `,
-      }),
-    });
-
-    if (response.ok) {
-      status = {
-        type: "success",
-        message: "Mensaje enviado con éxito. Gracias por contactar.",
-      };
-    } else {
-      const errorData = await response.json();
-      console.error("Error de Resend:", errorData);
-      status = {
-        type: "error",
-        message:
-          "Hubo un problema al enviar el mensaje. Inténtalo de nuevo o escríbenos a infogarciamengual@gmail.com.",
-      };
-    }
-  } catch (error) {
-    console.error("Error al procesar el formulario:", error);
-    status = { type: "error", message: "Error interno. Inténtalo más tarde." };
-  }
-}
 ---
 
 <Layout>
@@ -78,15 +14,12 @@ if (Astro.request.method === "POST") {
       </p>
     </header>
 
-    {
-      status.message && (
-        <div class={`status-message ${status.type}`}>{status.message}</div>
-      )
-    }
+    <div id="status-message" class="status-message" style="display: none;">
+    </div>
 
     <div class="contact-content">
       <section class="contact-form-section">
-        <form method="POST" class="contact-form">
+        <form id="contact-form" class="contact-form">
           <div class="form-group">
             <label for="name">Nombre completo</label>
             <input
@@ -119,7 +52,7 @@ if (Astro.request.method === "POST") {
               placeholder="¿En qué podemos ayudarte?"></textarea>
           </div>
 
-          <button type="submit" class="gallery-btn">
+          <button type="submit" id="submit-btn" class="gallery-btn">
             <span>ENVIAR MENSAJE</span>
             <Icon name="send" size={16} />
           </button>
@@ -159,6 +92,64 @@ if (Astro.request.method === "POST") {
 
 <script>
   const initContact = () => {
+    const form = document.getElementById("contact-form") as HTMLFormElement;
+    const statusEl = document.getElementById("status-message");
+    const submitBtn = document.getElementById(
+      "submit-btn",
+    ) as HTMLButtonElement;
+    const submitSpan = submitBtn?.querySelector("span");
+
+    if (form && statusEl && submitBtn) {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Reset state
+        statusEl.style.display = "none";
+        statusEl.className = "status-message";
+        if (submitSpan) submitSpan.textContent = "ENVIANDO...";
+        submitBtn.style.opacity = "0.7";
+        submitBtn.style.pointerEvents = "none";
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+          const response = await fetch("/api/contacto", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (response.ok) {
+            statusEl.textContent =
+              "Mensaje enviado con éxito. Gracias por contactar.";
+            statusEl.classList.add("success");
+            statusEl.style.display = "block";
+            form.reset();
+          } else {
+            statusEl.textContent =
+              "Hubo un problema al enviar el mensaje. Inténtalo de nuevo o escríbenos a infogarciamengual@gmail.com.";
+            statusEl.classList.add("error");
+            statusEl.style.display = "block";
+          }
+        } catch (error) {
+          statusEl.textContent = "Error interno. Inténtalo más tarde.";
+          statusEl.classList.add("error");
+          statusEl.style.display = "block";
+        } finally {
+          if (submitSpan) submitSpan.textContent = "ENVIAR MENSAJE";
+          submitBtn.style.opacity = "";
+          submitBtn.style.pointerEvents = "";
+          window.scrollTo({
+            top: statusEl.offsetTop - 100,
+            behavior: "smooth",
+          });
+        }
+      });
+    }
+
     const copyButton = document.querySelector(
       "[data-copy-email]",
     ) as HTMLButtonElement;
@@ -180,19 +171,6 @@ if (Astro.request.method === "POST") {
             label.textContent = "Copiar";
           }, 1600);
         } catch {}
-      });
-    }
-
-    const form = document.querySelector(".contact-form") as HTMLFormElement;
-    if (form) {
-      form.addEventListener("submit", () => {
-        const btn = form.querySelector(".gallery-btn") as HTMLButtonElement;
-        const span = btn?.querySelector("span");
-        if (span) span.textContent = "ENVIANDO...";
-        if (btn) {
-          btn.style.opacity = "0.7";
-          btn.style.pointerEvents = "none";
-        }
       });
     }
   };
