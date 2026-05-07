@@ -2,6 +2,7 @@
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import { ClientRouter } from "astro:transitions";
+import "../styles/global.css";
 
 interface Props {
   fullWidth?: boolean;
@@ -80,46 +81,14 @@ const canonicalUrl = new URL(pathname, siteUrl).href;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link
       rel="stylesheet"
       href="https://unpkg.com/photoswipe@5.4.4/dist/photoswipe.css"
     />
-    <link
-      rel="preload"
-      href="/fonts/permanent-marker-latin-400-normal.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
     <ClientRouter fallback="animate" />
-    <style is:global>
-      ::view-transition-old(root) {
-        animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out;
-      }
-      ::view-transition-new(root) {
-        animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in;
-      }
-
-      @keyframes fade-out {
-        from {
-          opacity: 1;
-        }
-        to {
-          opacity: 0;
-        }
-      }
-      @keyframes fade-in {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-    </style>
     <script is:inline>
       document.addEventListener("astro:before-swap", (ev) => {
         const fromPath = window.location.pathname;
@@ -160,174 +129,3 @@ const canonicalUrl = new URL(pathname, siteUrl).href;
     <Footer transition:persist />
   </body>
 </html>
-
-<style is:global>
-  @font-face {
-    font-family: "Permanent Marker";
-    src:
-      url("/fonts/permanent-marker-latin-400-normal.woff2") format("woff2"),
-      url("/fonts/permanent-marker-latin-400-normal.woff") format("woff");
-    font-style: normal;
-    font-weight: 400;
-    font-display: block;
-  }
-
-  html {
-    overflow-y: auto;
-  }
-
-  body {
-    margin: 0;
-    width: 100%;
-    min-height: 100vh;
-    font-family: "Inter", sans-serif;
-    display: flex;
-    flex-direction: column;
-  }
-
-  :focus-visible {
-    outline: 2px solid #333;
-    outline-offset: 4px;
-  }
-
-  main {
-    flex: 1;
-    width: 100%;
-    margin: 0 auto;
-    box-sizing: border-box;
-  }
-
-  .main-padded {
-    max-width: 1200px;
-    padding: 4rem 2rem;
-  }
-
-  .main-full {
-    max-width: 100%;
-    padding: 0;
-  }
-
-  @media (max-width: 768px) {
-    .main-padded {
-      padding: 2rem 1rem;
-    }
-  }
-
-  .pswp__img {
-    object-fit: contain !important;
-    transition: none !important;
-    animation: none !important;
-  }
-
-  .pswp__img--placeholder {
-    display: none !important;
-  }
-
-  .pswp-multiple .pswp__button--arrow {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-
-  .pswp-multiple .pswp__button--arrow--prev {
-    left: 10px !important;
-  }
-
-  .pswp-multiple .pswp__button--arrow--next {
-    right: 10px !important;
-  }
-
-  .pswp-multiple .pswp__button--arrow::before {
-    background-color: rgba(0, 0, 0, 0.4) !important;
-    border-radius: 50% !important;
-    width: 44px !important;
-    height: 44px !important;
-  }
-
-  .gallery-btn {
-    margin-top: 1.5rem;
-    background: transparent;
-    border: 1px solid #333;
-    padding: 0.6rem 1.2rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.2em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: #333;
-    text-transform: uppercase;
-    display: inline-block;
-  }
-
-  .gallery-btn:hover {
-    background: #333;
-    color: white;
-  }
-
-  .pswp__custom-caption {
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.7) 0%,
-      rgba(0, 0, 0, 0.4) 70%,
-      transparent 100%
-    );
-    color: #fff;
-    padding: 2rem 1.5rem 1.5rem;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    text-align: center;
-    font-weight: 300;
-    z-index: 1000;
-    pointer-events: none;
-  }
-
-  .pswp-caption-content {
-    max-width: 600px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-
-  .pswp-caption-category {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.25em;
-    color: rgba(255, 255, 255, 0.7);
-    display: block;
-    margin-bottom: 0.3rem;
-    font-weight: 400;
-  }
-
-  .pswp-caption-title {
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    display: block;
-    margin-bottom: 0.2rem;
-  }
-
-  .pswp-caption-year-small {
-    font-size: 0.85rem;
-    color: #ccc;
-    letter-spacing: 0.05em;
-    font-weight: 300;
-    margin-left: 0.5rem;
-  }
-
-  .pswp-caption-meta {
-    font-size: 0.75rem;
-    color: #bbb;
-    display: flex;
-    justify-content: center;
-    gap: 0.8rem;
-    letter-spacing: 0.05em;
-  }
-
-  .pswp-caption-meta span:not(:last-child)::after {
-    content: "•";
-    margin-left: 0.8rem;
-    opacity: 0.5;
-  }
-</style>

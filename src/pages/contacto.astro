@@ -76,11 +76,11 @@ import Icon from "@components/Icons.astro";
               class="gallery-btn copy-button"
               data-copy-email
             >
+              <span class="copy-label">Copiar</span>
               <span class="copy-icon-wrapper" data-copy-icon>
                 <Icon name="copy" size={16} class="icon-copy" />
                 <Icon name="check" size={16} class="icon-check" />
               </span>
-              <span class="copy-label">Copiar</span>
             </button>
           </div>
         </div>
@@ -308,22 +308,12 @@ import Icon from "@components/Icons.astro";
     position: relative;
   }
 
-  .copy-icon-wrapper :global(.icon-copy),
-  .copy-icon-wrapper :global(.icon-check) {
-    position: absolute;
-    inset: 0;
-  }
-
-  .copy-icon-wrapper :global(.icon-check) {
+  .copy-button.is-copied .icon-copy {
     display: none;
   }
 
-  .copy-button.is-copied .copy-icon-wrapper :global(.icon-copy) {
+  .copy-button:not(.is-copied) .icon-check {
     display: none;
-  }
-
-  .copy-button.is-copied .copy-icon-wrapper :global(.icon-check) {
-    display: block;
   }
 
   .contact-sidebar {

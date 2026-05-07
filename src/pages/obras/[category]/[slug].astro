@@ -24,7 +24,7 @@ const images = work.images ?? [];
       href={`/obras/${work.category}`}
       class="back-btn"
       aria-label={`Volver a la categoría ${work.category.replace("-", " ")}`}
-      ><Icon name="chevron-left" size={18} /> Volver</a
+      ><Icon name="chevron-left" size={18} class="back-icon" /> Volver</a
     >
   </div>
   <div class="work-detail-container">
@@ -286,6 +286,7 @@ const images = work.images ?? [];
     align-items: center;
     justify-content: center;
     padding: 0;
+    border-radius: 12px;
   }
 
   .pswp-link {
@@ -296,6 +297,7 @@ const images = work.images ?? [];
     transition: opacity 0.3s ease;
     height: 100%;
     width: 100%;
+    border-radius: 12px;
   }
 
   .pswp-link:hover img {
@@ -310,6 +312,7 @@ const images = work.images ?? [];
     display: block;
     object-fit: contain;
     user-select: none;
+    border-radius: 12px;
   }
 
   .carousel-nav {
@@ -327,7 +330,7 @@ const images = work.images ?? [];
     border: none;
     width: 44px;
     height: 44px;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -346,43 +349,12 @@ const images = work.images ?? [];
     height: 32px;
   }
 
-  :global(body.pswp-active .carousel-nav),
-  :global(body.pswp-active .embla__dots) {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-
   .embla__dots {
     display: flex;
     justify-content: center;
     gap: 0.6rem;
     padding: 1rem 0;
     z-index: 10;
-  }
-
-  :global(.embla__dot) {
-    width: 20px;
-    height: 4px;
-    border-radius: 2px;
-    background-color: rgba(0, 0, 0, 0.1);
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  :global(.embla__dot:hover) {
-    background-color: rgba(0, 0, 0, 0.3);
-  }
-
-  :global(.embla__dot.is-selected) {
-    background-color: rgba(0, 0, 0, 0.9);
-    width: 40px;
-  }
-
-  :global(.embla__dot.is-selected:hover) {
-    background-color: #000;
   }
 
   .info-section {
@@ -445,6 +417,9 @@ const images = work.images ?? [];
   }
 
   .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     text-decoration: none;
     font-size: 0.8rem;
     color: #999;
@@ -453,6 +428,14 @@ const images = work.images ?? [];
     transition: color 0.3s;
     position: relative;
     padding-bottom: 2px;
+  }
+
+  .back-btn .back-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .back-btn:hover .back-icon {
+    transform: translateX(-4px);
   }
 
   .back-btn::after {
