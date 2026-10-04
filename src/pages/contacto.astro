@@ -1,6 +1,8 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import Icon from "@components/Icons.astro";
+
+const hasContactForm = Boolean(import.meta.env.PUBLIC_TURNSTILE_SITE_KEY);
 ---
 
 <Layout>
@@ -8,61 +10,86 @@ import Icon from "@components/Icons.astro";
     <header class="page-header">
       <h1 class="page-title">CONTACTO</h1>
       <p class="page-subtitle">
-        Para más información sobre la obra y el legado del escultor, o para
-        cualquier consulta, puedes utilizar el formulario o escribirnos
-        directamente.
+        {
+          hasContactForm
+            ? "Para más información sobre la obra y el legado del escultor, o para cualquier consulta, puedes utilizar el formulario o escribirnos directamente."
+            : "Para más información sobre la obra y el legado del escultor, o para cualquier consulta, escríbenos directamente."
+        }
       </p>
     </header>
 
-    <div id="status-message" class="status-message" style="display: none;">
-    </div>
+    {
+      hasContactForm && (
+        <div
+          id="status-message"
+          class="status-message"
+          style="display: none;"
+        ></div>
+      )
+    }
 
-    <div class="contact-content">
-      <section class="contact-form-section">
-        <form id="contact-form" class="contact-form">
-          <div class="form-group">
-            <label for="name">Nombre completo</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              placeholder="Tu nombre..."
-            />
-          </div>
+    <div class:list={["contact-content", { "email-only": !hasContactForm }]}>
+      {
+        hasContactForm && (
+          <section class="contact-form-section">
+            <form id="contact-form" class="contact-form">
+              <div class="form-group">
+                <label for="name">Nombre completo</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  maxlength="100"
+                  placeholder="Tu nombre..."
+                />
+              </div>
 
-          <div class="form-group">
-            <label for="email">Correo electrónico</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              placeholder="tu@email.com"
-            />
-          </div>
+              <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  maxlength="254"
+                  placeholder="tu@email.com"
+                />
+              </div>
 
-          <div class="form-group">
-            <label for="message">Mensaje</label>
-            <textarea
-              id="message"
-              name="message"
-              required
-              rows="5"
-              placeholder="¿En qué podemos ayudarte?"></textarea>
-          </div>
+              <div class="form-group">
+                <label for="message">Mensaje</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  maxlength="5000"
+                  rows="5"
+                  placeholder="¿En qué podemos ayudarte?"
+                />
+              </div>
 
-          <button type="submit" id="submit-btn" class="gallery-btn">
-            <span>ENVIAR MENSAJE</span>
-            <Icon name="send" size={16} />
-          </button>
-        </form>
-      </section>
+              <div id="turnstile-container" />
+
+              <button type="submit" id="submit-btn" class="gallery-btn">
+                <span>ENVIAR MENSAJE</span>
+                <Icon name="send" size={16} />
+              </button>
+            </form>
+          </section>
+        )
+      }
 
       <section class="contact-sidebar">
         <div class="divider"></div>
         <div class="contact-item">
-          <span class="label">O Escríbenos directamente</span>
+          <span class="label"
+            >{
+              hasContactForm
+                ? "O Escríbenos directamente"
+                : "Escríbenos directamente"
+            }</span
+          >
           <div class="contact-actions">
             <a
               href="mailto:infogarciamengual@gmail.com"
@@ -91,6 +118,49 @@ import Icon from "@components/Icons.astro";
 </Layout>
 
 <script>
+  type TurnstileApi = {
+    render: (
+      container: HTMLElement,
+      options: {
+        sitekey: string;
+        action: string;
+        callback: (token: string) => void;
+        "expired-callback": () => void;
+        "error-callback": () => void;
+      },
+    ) => string;
+    reset: (widgetId: string) => void;
+    remove: (widgetId: string) => void;
+  };
+
+  const turnstileWindow = window as Window & { turnstile?: TurnstileApi };
+  const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+  let turnstileLoading: Promise<TurnstileApi> | undefined;
+
+  const loadTurnstile = (): Promise<TurnstileApi> => {
+    if (turnstileWindow.turnstile)
+      return Promise.resolve(turnstileWindow.turnstile);
+    if (turnstileLoading) return turnstileLoading;
+
+    turnstileLoading = new Promise<TurnstileApi>((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src =
+        "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+      script.async = true;
+      script.onload = () => {
+        if (turnstileWindow.turnstile) resolve(turnstileWindow.turnstile);
+        else reject(new Error("Turnstile no disponible"));
+      };
+      script.onerror = () => reject(new Error("No se pudo cargar Turnstile"));
+      document.head.appendChild(script);
+    }).catch((error) => {
+      turnstileLoading = undefined;
+      throw error;
+    });
+
+    return turnstileLoading;
+  };
+
   const initContact = () => {
     const form = document.getElementById("contact-form") as HTMLFormElement;
     const statusEl = document.getElementById("status-message");
@@ -101,6 +171,67 @@ import Icon from "@components/Icons.astro";
 
     if (form && statusEl && submitBtn) {
       const messageArea = form.querySelector("#message") as HTMLTextAreaElement;
+      const turnstileContainer = form.querySelector(
+        "#turnstile-container",
+      ) as HTMLElement;
+      let turnstileToken = "";
+      let widgetId: string | undefined;
+      let turnstileApi: TurnstileApi | undefined;
+
+      const showError = (message: string) => {
+        statusEl.textContent = message;
+        statusEl.className = "status-message error";
+        statusEl.style.display = "block";
+      };
+
+      const hideForm = () => {
+        form.closest(".contact-form-section")?.remove();
+        statusEl.style.display = "none";
+        document.querySelector(".contact-content")?.classList.add("email-only");
+        const label = document.querySelector(".contact-sidebar .label");
+        if (label) label.textContent = "Escríbenos directamente";
+        const subtitle = document.querySelector(".page-subtitle");
+        if (subtitle) {
+          subtitle.textContent =
+            "Para más información sobre la obra y el legado del escultor, o para cualquier consulta, escríbenos directamente.";
+        }
+      };
+
+      if (!siteKey) {
+        hideForm();
+      } else {
+        loadTurnstile()
+          .then((api) => {
+            if (!document.contains(form)) return;
+            turnstileApi = api;
+            widgetId = api.render(turnstileContainer, {
+              sitekey: siteKey,
+              action: "contacto",
+              callback: (token) => {
+                turnstileToken = token;
+              },
+              "expired-callback": () => {
+                turnstileToken = "";
+                if (widgetId) api.reset(widgetId);
+              },
+              "error-callback": () => {
+                turnstileToken = "";
+              },
+            });
+          })
+          .catch(() => {
+            if (!document.contains(form)) return;
+            hideForm();
+          });
+      }
+
+      document.addEventListener(
+        "astro:before-swap",
+        () => {
+          if (widgetId && turnstileApi) turnstileApi.remove(widgetId);
+        },
+        { once: true },
+      );
 
       if (messageArea) {
         messageArea.addEventListener("input", () => {
@@ -112,14 +243,19 @@ import Icon from "@components/Icons.astro";
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
+        if (!turnstileToken) {
+          showError("Completa la verificación antes de enviar el mensaje.");
+          return;
+        }
+
         statusEl.style.display = "none";
         statusEl.className = "status-message";
         if (submitSpan) submitSpan.textContent = "ENVIANDO...";
-        submitBtn.style.opacity = "0.7";
-        submitBtn.style.pointerEvents = "none";
+        submitBtn.disabled = true;
 
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
+        data.turnstileToken = turnstileToken;
 
         try {
           const response = await fetch("/api/contacto", {
@@ -138,19 +274,17 @@ import Icon from "@components/Icons.astro";
             form.reset();
             if (messageArea) messageArea.style.height = "auto";
           } else {
-            statusEl.textContent =
-              "Hubo un problema al enviar el mensaje. Inténtalo de nuevo o escríbenos a infogarciamengual@gmail.com.";
-            statusEl.classList.add("error");
-            statusEl.style.display = "block";
+            showError(
+              "Hubo un problema al enviar el mensaje. Inténtalo de nuevo o escríbenos a infogarciamengual@gmail.com.",
+            );
           }
         } catch (error) {
-          statusEl.textContent = "Error interno. Inténtalo más tarde.";
-          statusEl.classList.add("error");
-          statusEl.style.display = "block";
+          showError("Error interno. Inténtalo más tarde.");
         } finally {
+          turnstileToken = "";
+          if (widgetId && turnstileApi) turnstileApi.reset(widgetId);
           if (submitSpan) submitSpan.textContent = "ENVIAR MENSAJE";
-          submitBtn.style.opacity = "";
-          submitBtn.style.pointerEvents = "";
+          submitBtn.disabled = false;
           window.scrollTo({
             top: statusEl.offsetTop - 100,
             behavior: "smooth",
@@ -224,6 +358,28 @@ import Icon from "@components/Icons.astro";
     gap: 8rem;
     align-items: start;
     position: relative;
+  }
+
+  .contact-content.email-only {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-content.email-only::after {
+    display: none;
+  }
+
+  .contact-content.email-only .contact-sidebar {
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .contact-content.email-only .contact-item,
+  .contact-content.email-only .contact-actions {
+    align-items: center;
+    text-align: center;
   }
 
   .contact-content > * {
