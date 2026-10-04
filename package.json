@@ -9,11 +9,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.9",
-    "@astrojs/sitemap": "^3.7.2",
-    "astro": "^6.2.2",
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.5",
     "embla-carousel": "^8.6.0",
     "photoswipe": "^5.4.4",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   }
 }
