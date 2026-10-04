@@ -128,6 +128,23 @@ export async function onRequestPost(context: {
     return json({ error: "Datos no válidos" }, 400);
   }
 
+  const bccEmail = env.CONTACT_BCC_EMAIL?.trim();
+  const testRequested = data.email
+    .toLowerCase()
+    .endsWith("+contacto-prueba@gmail.com");
+  const testAlias = bccEmail?.replace(
+    /@gmail\.com$/i,
+    "+contacto-prueba@gmail.com",
+  );
+  if (
+    testRequested &&
+    (!bccEmail ||
+      !testAlias ||
+      data.email.toLowerCase() !== testAlias.toLowerCase())
+  ) {
+    return json({ error: "Dirección de prueba no configurada" }, 400);
+  }
+
   try {
     const verificationResponse = await fetch(
       "https://challenges.cloudflare.com/turnstile/v0/siteverify",
@@ -181,10 +198,14 @@ export async function onRequestPost(context: {
       },
       body: JSON.stringify({
         from: "Antonio García Mengual <no-reply@antoniogarciamengual.com>",
-        to: ["infogarciamengual@gmail.com"],
-        bcc: env.CONTACT_BCC_EMAIL ? [env.CONTACT_BCC_EMAIL] : undefined,
+        to: [testRequested ? bccEmail : "infogarciamengual@gmail.com"],
+        bcc: testRequested ? undefined : bccEmail ? [bccEmail] : undefined,
         reply_to: data.email,
-        subject: "Consulta: " + data.name + " (vía antoniogarciamengual.com)",
+        subject:
+          (testRequested ? "[PRUEBA] " : "") +
+          "Consulta: " +
+          data.name +
+          " (vía antoniogarciamengual.com)",
         html,
       }),
     });
